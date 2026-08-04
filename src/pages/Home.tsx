@@ -1,6 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import VideoCard from "../components/VideoCard";
 import Hero from "../components/Hero";
+import Categories from "../components/Categories";
 function Home() {
   return (
     <div className="flex">
@@ -9,8 +10,9 @@ function Home() {
       <main className="flex-1 p-8 text-white">
 
         <Hero />
+        <Categories />
 
-        <section className="mt-16">
+        <section className="mt-10">
           <h2 className="text-3xl font-bold mb-8">
             🔥 Trending
           </h2>
@@ -53,4 +55,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Home; 

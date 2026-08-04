@@ -1,38 +1,54 @@
 import hero from "../assets/hero.jpg";
+import { FaPlay, FaCompass } from "react-icons/fa";
 
 function Hero() {
   return (
-    <section className="relative w-full h-[500px] rounded-3xl overflow-hidden">
+    <section className="relative w-full h-[520px] rounded-3xl overflow-hidden shadow-2xl">
 
+      {/* Background Image */}
       <img
         src={hero}
-        alt="Hero"
-        className="w-full h-full object-cover"
+        alt="Hero Banner"
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/55" />
+
+      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent" />
 
-      <div className="absolute left-10 top-1/2 -translate-y-1/2 max-w-xl">
+      {/* Content */}
+      <div className="relative z-10 flex h-full items-center px-12">
 
-        <h1 className="text-6xl font-extrabold text-white leading-tight">
-          Welcome to
-          <span className="text-red-500"> NexStream</span>
-        </h1>
+        <div className="max-w-2xl">
 
-        <p className="mt-6 text-gray-300 text-lg">
-          Watch millions of videos, upload your creations,
-          and enjoy an immersive streaming experience.
-        </p>
+          <p className="text-red-500 uppercase tracking-[0.3em] font-semibold">
+            Welcome to
+          </p>
 
-        <div className="mt-8 flex gap-4">
+          <h1 className="mt-4 text-6xl font-black leading-tight">
+            NexStream
+          </h1>
 
-          <button className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl font-bold transition">
-            ▶ Start Watching
-          </button>
+          <p className="mt-6 text-xl text-gray-300 leading-8">
+            Watch amazing videos, upload your own creations,
+            and explore content from creators around the world.
+          </p>
 
-          <button className="bg-white/10 backdrop-blur-md hover:bg-white/20 px-8 py-4 rounded-xl transition">
-            Browse
-          </button>
+          <div className="mt-10 flex gap-5">
+
+            <button className="flex items-center gap-2 rounded-xl bg-red-600 px-8 py-4 font-bold hover:bg-red-700 transition">
+              <FaPlay />
+              Watch Now
+            </button>
+
+            <button className="flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md px-8 py-4 font-bold hover:bg-white/20 transition">
+              <FaCompass />
+              Explore
+            </button>
+
+          </div>
 
         </div>
 
