@@ -38,8 +38,7 @@ function Hero() {
 
           <div className="mt-10 flex gap-5">
 
-            <button className="flex items-center gap-2 rounded-xl bg-red-600 px-8 py-4 font-bold hover:bg-red-700 transition">
-              <FaPlay />
+            <button className="flex items-center gap-2 rounded-xl bg-red-600 px-8 py-4 font-bold hover:bg-red-700 transition-all duration-300 hover:scale-105">
               Watch Now
             </button>
 

@@ -1,7 +1,7 @@
-import Sidebar from "../components/Sidebar";
-import VideoCard from "../components/VideoCard";
+import VideoSection from "../components/VideoSection";                               import Sidebar from "../components/Sidebar";
+
 import Hero from "../components/Hero";
-import Categories from "../components/Categories";   import videos from "../data/videos";
+import Categories from "../components/Categories";   
 function Home() {
   return (
     <div className="flex">
@@ -12,25 +12,11 @@ function Home() {
         <Hero />
         <Categories />
 
-        <section className="mt-10">
-          <h2 className="text-3xl font-bold mb-8">
-            🔥 Trending
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-            {videos.map((video, index) => (
-  <VideoCard
-    key={index}
-    title={video.title}
-    channel={video.channel}
-    views={video.views}
-    image={video.image}
-  />
-))}
-
-          </div>
-        </section>
+       <VideoSection title="🔥 Trending" />
+<VideoSection title="🎮 Gaming" />
+<VideoSection title="🎌 Anime" />
+<VideoSection title="💻 Coding" />
+<VideoSection title="🤖 AI Picks" />
 
       </main>
     </div>
