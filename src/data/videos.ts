@@ -1,27 +1,30 @@
-const videos = [
+  import thumbnail1 from "../assets/thumbnails/thumbnail1.jpg";
+import thumbnail2 from "../assets/thumbnails/thumbnail2.jpg";
+import thumbnail3 from "../assets/thumbnails/thumbnail3.jpg";
+import thumbnail4 from "../assets/thumbnails/thumbnail4.jpg";                       const videos = [
   {
     title: "Build a Modern Streaming Website",
     channel: "NexStream",
     views: "120K views • 2 days ago",
-    image: "https://picsum.photos/600/400?random=1",
+    image: thumbnail1,
   },
   {
     title: "React + TypeScript Crash Course",
     channel: "Code Master",
     views: "84K views • 1 week ago",
-    image: "https://picsum.photos/600/400?random=2",
+    image: thumbnail2,
   },
   {
     title: "Top 10 AI Tools in 2026",
     channel: "Tech World",
     views: "230K views • 5 days ago",
-    image: "https://picsum.photos/600/400?random=3",
+    image: thumbnail3,
   },
   {
     title: "Create Netflix UI from Scratch",
     channel: "Frontend Pro",
     views: "310K views • 3 weeks ago",
-    image: "https://picsum.photos/600/400?random=4",
+    image: thumbnail4,
   },
 ];
 
