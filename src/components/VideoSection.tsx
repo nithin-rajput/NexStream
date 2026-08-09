@@ -19,7 +19,7 @@ function VideoSection({ title }: VideoSectionProps) {
             title={video.title}
             channel={video.channel}
             views={video.views}
-            image={video.image}
+            image={video.image}      duration={video.duration}    avatar={video.avatar}
           />
         ))}
       </div>
