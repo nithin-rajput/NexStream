@@ -16,6 +16,7 @@ function VideoSection({ title }: VideoSectionProps) {
         {videos.map((video, index) => (
           <VideoCard
             key={index}
+            id={video.id}
             title={video.title}
             channel={video.channel}
             views={video.views}
