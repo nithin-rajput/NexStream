@@ -1,15 +1,20 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import videos from "../data/videos";
 import demoVideo from "../assets/videos/demo.mp4";
 import { FaThumbsUp, FaShareAlt, FaBookmark } from "react-icons/fa";
 import { useState } from "react";
+import VideoCard from "../components/VideoCard";
 
 function Watch() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
 const [saved, setSaved] = useState(false);
 
   const video = videos.find((video) => video.id === Number(id));
+  const relatedVideos = videos.filter(
+  (item) => item.id !== Number(id)
+);
 
   if (!video) {
     return (
@@ -133,6 +138,37 @@ const [saved, setSaved] = useState(false);
 </div>
 
       </div>
+      
+{/* Related Videos */}
+<div className="mt-12">
+
+  <h2 className="text-2xl font-bold mb-6">
+    Up Next
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {relatedVideos.map((item) => (
+      <div
+        key={item.id}
+        onClick={() => navigate(`/watch/${item.id}`)}
+        className="cursor-pointer"
+      >
+        <VideoCard
+          id={item.id}
+          title={item.title}
+          channel={item.channel}
+          views={item.views}
+          image={item.image}
+          duration={item.duration}
+          avatar={item.avatar}
+        />
+      </div>
+    ))}
+
+  </div>
+
+</div>
 
     </div>
   );
