@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import videos from "../data/videos";
 import demoVideo from "../assets/videos/demo.mp4";
 import { FaThumbsUp, FaShareAlt, FaBookmark } from "react-icons/fa";
-import { useState } from "react";
+import {useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
 
 function Watch() {
@@ -10,6 +10,33 @@ function Watch() {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
 const [saved, setSaved] = useState(false);
+const [comment, setComment] = useState("");
+ const [comments, setComments] = useState<
+  Record<number, { text: string }[]>
+>(() => {
+  const savedComments = localStorage.getItem("nexstream-comments");
+
+  if (savedComments) {
+    return JSON.parse(savedComments);
+  }
+
+  return {};
+});
+
+const [commentsLoaded, setCommentsLoaded] = useState(false);
+
+useEffect(() => {
+  setCommentsLoaded(true);
+}, []);
+
+useEffect(() => {
+  if (!commentsLoaded) return;
+
+  localStorage.setItem(
+    "nexstream-comments",
+    JSON.stringify(comments)
+  );
+}, [comments, commentsLoaded]);
 
   const video = videos.find((video) => video.id === Number(id));
   const relatedVideos = videos.filter(
@@ -135,6 +162,80 @@ const [saved, setSaved] = useState(false);
     learn something new, and explore more videos from creators
     around the world.
   </p>
+</div>
+{/* Comments */}
+<div className="mt-10">
+
+  <h2 className="text-2xl font-bold mb-6">
+    Comments
+  </h2>
+
+  {/* Comment Input */}
+  <div className="flex gap-3">
+
+    <input
+      type="text"
+      value={comment}
+      onChange={(e) => setComment(e.target.value)}
+      placeholder="Add a comment..."
+      className="flex-1 bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-red-500 transition"
+    />
+
+    <button
+  onClick={() => {
+    if (comment.trim() === "") return;
+
+    setComments({
+  ...comments,
+  [video.id]: [...(comments[video.id] || []), { text: comment }]
+});
+    setComment("");
+  }}
+  className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-semibold transition"
+>
+  Comment
+</button> 
+
+<div className="mt-6 space-y-4">
+
+  {(comments[video.id] || []).map((item, index) => (
+  <div
+    key={index}
+    className="bg-[#181818] rounded-xl p-4 border border-white/5 flex items-center justify-between gap-4"
+  >
+
+    <div>
+      <p className="text-gray-500 text-xs mb-1">
+        You
+      </p>
+
+      <p className="text-gray-300">
+        {item.text}
+      </p>
+    </div>
+
+    <button
+      onClick={() => {
+        const updatedComments = (comments[video.id] || []).filter(
+          (_, commentIndex) => commentIndex !== index
+        );
+
+        setComments({
+          ...comments,
+          [video.id]: updatedComments,
+        });
+      }}
+      className="text-gray-500 hover:text-red-500 transition"
+    >
+      Delete
+    </button>
+
+  </div>
+))}
+
+</div>
+  </div>
+
 </div>
 
       </div>
