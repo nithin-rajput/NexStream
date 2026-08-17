@@ -52,11 +52,10 @@ useEffect(() => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white p-8">
+    <div className="min-h-screen bg-[#0f0f0f] text-white px-4 py-6 sm:px-6 lg:px-8">
 
       {/* Video Player */}
-<div className="w-full bg-black rounded-2xl overflow-hidden shadow-2xl">
-
+<div className="w-full max-w-6xl mx-auto bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
   {/* Player Header */}
   <div className="flex items-center justify-between bg-gradient-to-r from-[#181818] to-[#222] px-5 py-3 border-b border-white/10">
     <span className="text-white font-bold tracking-wider text-lg">
@@ -82,29 +81,36 @@ useEffect(() => {
       {/* Video Info */}
       <div className="mt-8">
 
-        <h1 className="text-3xl md:text-4xl font-bold leading-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
   {video.title}
 </h1>
 
         {/* Channel */}
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
+  {/* Channel */}
+  <div className="flex items-center gap-4">
 
-           <img
-    src={video.avatar}
-    alt={video.channel}
-    className="w-12 h-12 rounded-full object-cover ring-2 ring-white/10"
-  />
+    <img
+      src={video.avatar}
+      alt={video.channel}
+      className="w-12 h-12 rounded-full object-cover ring-2 ring-white/10"
+    />
 
-  <div>
-    <p className="font-semibold text-lg">
-      {video.channel}
-    </p>
+    <div>
+      <p className="font-semibold text-lg">
+        {video.channel}
+      </p>
 
-    <p className="text-gray-500 text-sm">
-      {video.views}
-    </p>
-  </div>   <div className="flex items-center gap-3">
+      <p className="text-gray-500 text-sm">
+        {video.views}
+      </p>
+    </div>
+
+  </div>
+
+  {/* Actions */}
+  <div className="flex flex-wrap items-center gap-3">
 
   <button
   onClick={() => setLiked(!liked)}
@@ -171,7 +177,7 @@ useEffect(() => {
   </h2>
 
   {/* Comment Input */}
-  <div className="flex gap-3">
+  <div className="flex flex-col sm:flex-row gap-3">
 
     <input
       type="text"
