@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import videos from "../data/videos";
 import demoVideo from "../assets/videos/demo.mp4";
 import { FaThumbsUp, FaShareAlt, FaBookmark } from "react-icons/fa";
-import {useEffect, useState } from "react";
+import {useEffect, useState, useRef } from "react";
 import VideoCard from "../components/VideoCard";
 
 function Watch() {
@@ -10,6 +10,12 @@ function Watch() {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
 const [saved, setSaved] = useState(false);
+const [miniPlayer, setMiniPlayer] = useState(false);
+const [miniClosed, setMiniClosed] = useState(false);
+
+const mainVideoRef = useRef<HTMLVideoElement>(null);
+const miniVideoRef = useRef<HTMLVideoElement>(null);
+const playerContainerRef = useRef<HTMLDivElement>(null);
 const [comment, setComment] = useState("");
  const [comments, setComments] = useState<
   Record<number, { text: string }[]>
@@ -37,6 +43,65 @@ useEffect(() => {
     JSON.stringify(comments)
   );
 }, [comments, commentsLoaded]);
+useEffect(() => {
+  if (!miniPlayer) return;
+
+  const mainVideo = mainVideoRef.current;
+  const miniVideo = miniVideoRef.current;
+
+  if (!mainVideo || !miniVideo) return;
+
+  const syncMiniPlayer = () => {
+    if (Math.abs(miniVideo.currentTime - mainVideo.currentTime) > 0.3) {
+      miniVideo.currentTime = mainVideo.currentTime;
+    }
+  };
+
+  // Sync immediately when mini-player appears
+  syncMiniPlayer();
+
+  // Keep mini-player synced while main video plays
+  mainVideo.addEventListener("timeupdate", syncMiniPlayer);
+
+  return () => {
+    mainVideo.removeEventListener("timeupdate", syncMiniPlayer);
+  };
+}, [miniPlayer]);
+useEffect(() => {
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY;
+
+    if (scrollPosition > 500 && !miniClosed) {
+      setMiniPlayer(true);
+    } else if (scrollPosition <= 500) {
+  setMiniPlayer(false);
+  setMiniClosed(false);
+}useEffect(() => {
+  const player = playerContainerRef.current;
+
+  if (!player) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      setMiniPlayer(!entry.isIntersecting);
+    },
+    {
+      threshold: 0.1,
+    }
+  );
+
+  observer.observe(player);
+
+  return () => observer.disconnect();
+}, []);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [miniClosed]);
 
   const video = videos.find((video) => video.id === Number(id));
   const relatedVideos = videos.filter(
@@ -55,7 +120,42 @@ useEffect(() => {
     <div className="min-h-screen bg-[#0f0f0f] text-white px-4 py-6 sm:px-6 lg:px-8">
 
       {/* Video Player */}
-<div className="w-full max-w-6xl mx-auto bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
+<div
+ref={playerContainerRef}
+  className="w-full max-w-6xl mx-auto bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl"
+  onClick={(e) => {
+    e.stopPropagation();
+    console.log("MAIN PLAYER AREA CLICKED");
+  }}
+>
+  {miniPlayer && !miniClosed && (
+  <div className="fixed bottom-6 right-6 z-50 w-[calc(100vw-2rem)] sm:w-80 bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10">
+    
+    {/* Mini Player Header */}
+    <div className="flex items-center justify-between px-3 py-2 bg-[#181818]">
+      <span className="text-sm font-semibold text-white">
+        Nex<span className="text-red-500">Stream</span>
+      </span>
+
+      <button
+        onClick={() => setMiniClosed(true)}
+        className="text-gray-400 hover:text-white transition text-lg"
+      >
+        ✕
+      </button>
+    </div>
+
+    {/* Mini Video */}
+    <video
+      ref={miniVideoRef}
+      src={demoVideo}
+      poster={video.image}
+      controls
+      className="w-full aspect-video object-contain bg-black"
+    />
+
+  </div>
+)}
   {/* Player Header */}
   <div className="flex items-center justify-between bg-gradient-to-r from-[#181818] to-[#222] px-5 py-3 border-b border-white/10">
     <span className="text-white font-bold tracking-wider text-lg">
@@ -69,13 +169,14 @@ useEffect(() => {
 
   {/* Video */}
   <div className="w-full aspect-video">
-    <video
-      src={demoVideo}
-      controls
-      poster={video.image}
-      className="w-full h-full object-contain"
-    />
-  </div>
+  <video
+  ref={mainVideoRef}
+  src={demoVideo}
+  controls
+  poster={video.image}
+  className="w-full h-full object-contain"
+/>
+</div>
 
 </div>
       {/* Video Info */}
@@ -245,6 +346,60 @@ useEffect(() => {
 </div>
 
       </div>
+      {/* Floating Mini Player */}
+{miniPlayer && !miniClosed && (
+  <div className="fixed bottom-5 right-5 z-50 w-[320px] sm:w-[380px] bg-[#111] rounded-xl overflow-hidden shadow-2xl border border-white/10">
+
+    {/* Mini Player Header */}
+    <div className="flex items-center justify-between px-3 py-2 bg-[#181818]">
+      <div className="flex items-center gap-2 min-w-0">
+        <span className="text-red-500 font-bold text-sm">
+          NexStream
+        </span>
+
+        <span className="text-gray-500 text-xs truncate">
+          {video.title}
+        </span>
+      </div>
+
+      <button
+        onClick={() => {
+          setMiniClosed(true);
+
+          if (miniVideoRef.current) {
+            miniVideoRef.current.pause();
+          }
+        }}
+        className="text-gray-400 hover:text-white text-lg px-2"
+      >
+        ✕
+      </button>
+    </div>
+
+    {/* Mini Video */}
+    <div className="aspect-video bg-black">
+      <video
+        ref={miniVideoRef}
+        src={demoVideo}
+        poster={video.image}
+        controls
+        className="w-full h-full object-contain"
+        onLoadedMetadata={() => {
+          if (mainVideoRef.current && miniVideoRef.current) {
+            miniVideoRef.current.currentTime =
+              mainVideoRef.current.currentTime;
+          }
+        }}
+        onPlay={() => {
+          if (mainVideoRef.current) {
+            mainVideoRef.current.pause();
+          }
+        }}
+      />
+    </div>
+
+  </div>
+)}
       
 {/* Related Videos */}
 <div className="mt-12">
